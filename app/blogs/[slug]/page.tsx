@@ -1,9 +1,12 @@
 import React from 'react'
 
-const Slugpage = () => {
+const Slugpage = async({params} : {params: Promise<{ slug: string }>}) => {
+  
+  const {slug} = await params;
+  
   return (
     <div>
-      This is the Slug Page!
+      This is the Slug Page : {slug}
     </div>
   )
 }
