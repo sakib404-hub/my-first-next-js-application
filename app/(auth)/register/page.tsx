@@ -3,7 +3,7 @@ import React from 'react'
 const RegisterPage = () => {
   return (
     <div>
-      This is the register page!
+      This is the RegisterPage!
     </div>
   )
 }

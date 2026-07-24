@@ -18,10 +18,10 @@ export default function RootLayout({
       className={`h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        Header
+        {/* header  */}
         {children}
-        Footer
-        </body>
+        {/* footer  */}
+      </body>
     </html>
   );
 }
