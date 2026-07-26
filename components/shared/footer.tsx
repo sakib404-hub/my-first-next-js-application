@@ -95,7 +95,7 @@ export const Footer = () => {
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-6 sm:flex-row">
           <p className="text-sm text-muted-foreground">
             {"© "}
-            {new Date().getFullYear()} Acme Inc. All rights reserved.
+            2026 Next Js Press. All rights reserved.
           </p>
           <div className="flex items-center gap-2">
             {socialLinks.map((social) => (

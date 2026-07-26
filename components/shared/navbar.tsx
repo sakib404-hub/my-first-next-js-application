@@ -70,7 +70,7 @@ export const Navbar = ()=> {
         {/* User dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger className="flex size-9 items-center justify-center rounded-full outline-none ring-offset-background transition focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-            <Avatar className="size-9">
+            <Avatar className="size-9 cursor-pointer">
               <AvatarImage src="/diverse-avatars.png" alt="User avatar" />
               <AvatarFallback>
                 <CircleUser className="size-5" />
