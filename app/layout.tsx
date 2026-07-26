@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { IBM_Plex_Sans, Space_Grotesk } from "next/font/google";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
+import { Navbar } from "@/components/shared/navbar";
+import { Footer } from "@/components/shared/footer";
 
+const spaceGroteskHeading = Space_Grotesk({subsets:['latin'],variable:'--font-heading'});
+
+const ibmPlexSans = IBM_Plex_Sans({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Create My First Next App",
@@ -15,13 +23,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`h-full antialiased`}
+      className={cn("h-full", "antialiased", "font-sans", ibmPlexSans.variable, spaceGroteskHeading.variable)}
     >
       <body className="min-h-full flex flex-col">
-        Header
+        {/* header or the navbar */}
+        <Navbar></Navbar>
         {children}
-        Footer
-        </body>
+        <Toaster position="top-center" ></Toaster>
+        {/* footer  */}
+        <Footer></Footer>
+      </body>
     </html>
   );
 }
