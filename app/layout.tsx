@@ -23,9 +23,11 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", "font-sans", ibmPlexSans.variable, spaceGroteskHeading.variable)}
     >
       <body className="min-h-full flex flex-col">
+        <p>Header</p>
         {/* header  */}
         {children}
         {/* footer  */}
+        <p>Footer</p>
       </body>
     </html>
   );
