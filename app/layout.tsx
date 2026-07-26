@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { IBM_Plex_Sans, Space_Grotesk } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
 
 const spaceGroteskHeading = Space_Grotesk({subsets:['latin'],variable:'--font-heading'});
 
@@ -26,6 +27,7 @@ export default function RootLayout({
         <p>Header</p>
         {/* header  */}
         {children}
+        <Toaster position="top-center" ></Toaster>
         {/* footer  */}
         <p>Footer</p>
       </body>

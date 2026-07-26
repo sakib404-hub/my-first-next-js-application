@@ -1,15 +1,34 @@
-"use clinet";
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { loginAction } from "../_actions/authActions";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 const LoginForm = () => {
+  const [state, action, pending] = useActionState(loginAction, false);
+
+  useEffect(()=>{
+    if(!state){
+        return ;
+    }
+
+    if(!state.success){
+       toast.error(state.message || "Login Failed");
+    }
+
+    if(state.success){
+     toast.success(state.message);
+    }
+
+  }, [state])
+
   return (
     <form
-      action={loginAction}
+      action={action}
      className="space-y-4">
       <Card className="p-5 space-y-5">
 
@@ -40,7 +59,11 @@ const LoginForm = () => {
         ></Input>
      </Field>
 
-        <Button type="submit">Login</Button>
+        <Button type="submit">
+          {
+            pending ? "submiting..." : "Login"
+          }
+        </Button>
       </Card>
     </form>
   );
