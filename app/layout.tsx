@@ -3,6 +3,8 @@ import "./globals.css";
 import { IBM_Plex_Sans, Space_Grotesk } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { Navbar } from "@/components/shared/navbar";
+import { Footer } from "@/components/shared/footer";
 
 const spaceGroteskHeading = Space_Grotesk({subsets:['latin'],variable:'--font-heading'});
 
@@ -24,12 +26,12 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", "font-sans", ibmPlexSans.variable, spaceGroteskHeading.variable)}
     >
       <body className="min-h-full flex flex-col">
-        <p>Header</p>
-        {/* header  */}
+        {/* header or the navbar */}
+        <Navbar></Navbar>
         {children}
         <Toaster position="top-center" ></Toaster>
         {/* footer  */}
-        <p>Footer</p>
+        <Footer></Footer>
       </body>
     </html>
   );
