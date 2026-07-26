@@ -1,5 +1,7 @@
 "use server"
 
+import { cookies } from "next/headers";
+
 
 interface LoginState {
     success : boolean;
@@ -12,7 +14,7 @@ interface LoginState {
 }
 
 export const loginAction = async(previousState : LoginState, formData : FormData) => {
-    
+
     const email = formData.get("email");
     const password = formData.get("password");
 
@@ -29,9 +31,21 @@ export const loginAction = async(previousState : LoginState, formData : FormData
         body : JSON.stringify(payLoad)
     })
 
-    const result = await res.json();
+    const result : LoginState = await res.json();
 
-    console.log(result);
+    if(result.success){
+        const cookieStore = await cookies();
+        cookieStore.set("accessToken", result.data.accessToken, {
+            httpOnly : true,
+            sameSite : 'lax',
+            maxAge : 60 * 60 * 24
+        });
+        cookieStore.set("refreshToken", result.data.refreshToken, {
+            httpOnly : true,
+            sameSite : 'lax',
+            maxAge : 60 * 60 * 24 * 7
+        })
+    }
 
     return result;
 }
