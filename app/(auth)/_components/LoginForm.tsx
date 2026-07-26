@@ -4,10 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { loginAction } from "../_actions/authActions";
 
 const LoginForm = () => {
   return (
-    <form className="space-y-4">
+    <form
+      action={loginAction}
+     className="space-y-4">
       <Card className="p-5 space-y-5">
 
     {/* for email  */}
