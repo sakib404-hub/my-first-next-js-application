@@ -1,6 +1,7 @@
 "use server"
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 
 interface LoginState {
@@ -31,7 +32,7 @@ export const loginAction = async(previousState : LoginState, formData : FormData
         body : JSON.stringify(payLoad)
     })
 
-    const result : LoginState = await res.json();
+    const result = await res.json();
 
     if(result.success){
         const cookieStore = await cookies();
@@ -45,6 +46,8 @@ export const loginAction = async(previousState : LoginState, formData : FormData
             sameSite : 'lax',
             maxAge : 60 * 60 * 24 * 7
         })
+
+        // redirect('/dashboard');
     }
 
     return result;
