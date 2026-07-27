@@ -25,6 +25,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { logOut } from "@/services/logout"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -39,30 +42,6 @@ const userMenuItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Settings", href: "/settings", icon: Settings },
 ]
-
-// {
-//     "success": true,
-//     "statusCode": 200,
-//     "message": "User Information with profile fetched successfully",
-//     "data": {
-//         "id": "81dc3d86-8bfa-4154-b7ae-7ccf5c927540",
-//         "name": "Sanjana Akther",
-//         "email": "sanjana@gmail.com",
-//         "activeStatus": "ACTIVE",
-//         "role": "USER",
-//         "createdAt": "2026-06-29T14:38:12.817Z",
-//         "updatedAt": "2026-06-29T14:38:12.817Z",
-//         "isPremium": false,
-//         "profile": {
-//             "id": "17c28091-53fa-4c71-967c-6abe2312175d",
-//             "profilePhoto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa2SAkeKXmDcRI7JSHTlDZCcKPpeIGuUvIBnT0vqkSTwBKonytW8FZOiNv2E0zvSQHlpO_LRUaSrRp7_8ZpTPktA1-mFY6hUscWEGfkYs&s=10",
-//             "bio": null,
-//             "userId": "81dc3d86-8bfa-4154-b7ae-7ccf5c927540",
-//             "createdAt": "2026-06-29T14:38:12.817Z",
-//             "updatedAt": "2026-06-29T14:38:12.817Z"
-//         }
-//     }
-// }
 
 interface IUser {
   success : boolean;
@@ -95,6 +74,15 @@ interface NavbarProps {
 export const Navbar = ({user} : NavbarProps)=> {
   const router = useRouter()
 
+
+  const handleUserMenuAction = async(action:string)=>{
+    if(action === 'logOut'){
+      await logOut();
+      toast.success("User Logged Out Successfully.");
+      router.push("/login");
+    }
+  }
+
   return (
     <header className="border-b bg-background">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4">
@@ -120,7 +108,8 @@ export const Navbar = ({user} : NavbarProps)=> {
         </nav>
 
         {/* User dropdown */}
-        <DropdownMenu>
+       {
+        user.success ?  <DropdownMenu>
           <DropdownMenuTrigger className="flex size-9 items-center justify-center rounded-full outline-none ring-offset-background transition focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
             <Avatar className="size-9 cursor-pointer">
               <AvatarImage src="/diverse-avatars.png" alt="User avatar" />
@@ -134,9 +123,9 @@ export const Navbar = ({user} : NavbarProps)=> {
             <DropdownMenuGroup>
               <DropdownMenuLabel>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-sm font-medium">{user.data.name}</span>
+                  <span className="text-sm font-medium">{user.data.name || "name"}</span>
                   <span className="text-xs font-normal text-muted-foreground">
-                    {user.data.email}
+                    {user.data.email || "Email"}
                   </span>
                 </div>
               </DropdownMenuLabel>
@@ -156,13 +145,17 @@ export const Navbar = ({user} : NavbarProps)=> {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               variant="destructive"
-              onClick={() => console.log("[v0] logout")}
+              onClick={async() => await handleUserMenuAction("logOut")}
             >
               <LogOut data-icon="inline-start" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> : <Link 
+        href={'/login'}
+        className="rounded-md px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-accent-foreground"
+        >Login</Link>
+       }
       </div>
     </header>
   )
