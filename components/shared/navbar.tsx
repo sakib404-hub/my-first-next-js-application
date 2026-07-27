@@ -40,7 +40,59 @@ const userMenuItems = [
   { label: "Settings", href: "/settings", icon: Settings },
 ]
 
-export const Navbar = ()=> {
+// {
+//     "success": true,
+//     "statusCode": 200,
+//     "message": "User Information with profile fetched successfully",
+//     "data": {
+//         "id": "81dc3d86-8bfa-4154-b7ae-7ccf5c927540",
+//         "name": "Sanjana Akther",
+//         "email": "sanjana@gmail.com",
+//         "activeStatus": "ACTIVE",
+//         "role": "USER",
+//         "createdAt": "2026-06-29T14:38:12.817Z",
+//         "updatedAt": "2026-06-29T14:38:12.817Z",
+//         "isPremium": false,
+//         "profile": {
+//             "id": "17c28091-53fa-4c71-967c-6abe2312175d",
+//             "profilePhoto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa2SAkeKXmDcRI7JSHTlDZCcKPpeIGuUvIBnT0vqkSTwBKonytW8FZOiNv2E0zvSQHlpO_LRUaSrRp7_8ZpTPktA1-mFY6hUscWEGfkYs&s=10",
+//             "bio": null,
+//             "userId": "81dc3d86-8bfa-4154-b7ae-7ccf5c927540",
+//             "createdAt": "2026-06-29T14:38:12.817Z",
+//             "updatedAt": "2026-06-29T14:38:12.817Z"
+//         }
+//     }
+// }
+
+interface IUser {
+  success : boolean;
+  statusCode : number;
+  message : string;
+  data : {
+    id : string;
+    name : string;
+    email : string; 
+    activeStatus : string;
+    role : string;
+    createdAt : string;
+    updatedAt : string;
+    isPremium : boolean;
+    profile : {
+      id : string;
+      profilePhoto : string;
+      bio : string | null;
+      userId : string;
+      createdAt : string;
+      updatedAt : string;
+    }
+  }
+}
+
+interface NavbarProps {
+  user : IUser
+}
+
+export const Navbar = ({user} : NavbarProps)=> {
   const router = useRouter()
 
   return (
@@ -82,9 +134,9 @@ export const Navbar = ()=> {
             <DropdownMenuGroup>
               <DropdownMenuLabel>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-sm font-medium">Jane Doe</span>
+                  <span className="text-sm font-medium">{user.data.name}</span>
                   <span className="text-xs font-normal text-muted-foreground">
-                    jane@acme.com
+                    {user.data.email}
                   </span>
                 </div>
               </DropdownMenuLabel>

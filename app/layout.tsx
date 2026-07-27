@@ -26,8 +26,6 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", "font-sans", ibmPlexSans.variable, spaceGroteskHeading.variable)}
     >
       <body className="min-h-full flex flex-col">
-        {/* header or the navbar */}
-        <Navbar></Navbar>
         {children}
         <Toaster position="top-center" ></Toaster>
         {/* footer  */}
