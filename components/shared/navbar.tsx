@@ -25,6 +25,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { logOut } from "@/services/logout"
+import { toast } from "sonner"
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -40,8 +42,44 @@ const userMenuItems = [
   { label: "Settings", href: "/settings", icon: Settings },
 ]
 
-export const Navbar = ()=> {
+interface IUser {
+  success : boolean;
+  statusCode : number;
+  message : string;
+  data : {
+    id : string;
+    name : string;
+    email : string; 
+    activeStatus : string;
+    role : string;
+    createdAt : string;
+    updatedAt : string;
+    isPremium : boolean;
+    profile : {
+      id : string;
+      profilePhoto : string;
+      bio : string | null;
+      userId : string;
+      createdAt : string;
+      updatedAt : string;
+    }
+  }
+}
+
+interface NavbarProps {
+  user : IUser
+}
+
+export const Navbar = ({user} : NavbarProps)=> {
   const router = useRouter()
+
+  const handleUserMenuAction = async(action:string)=>{
+    if(action === 'logOut'){
+      await logOut();
+      toast.success("User Logged Out Successfully.");
+      router.push("/login");
+    }
+  }
 
   return (
     <header className="border-b bg-background">
@@ -68,7 +106,8 @@ export const Navbar = ()=> {
         </nav>
 
         {/* User dropdown */}
-        <DropdownMenu>
+       {
+        user.success ?  <DropdownMenu>
           <DropdownMenuTrigger className="flex size-9 items-center justify-center rounded-full outline-none ring-offset-background transition focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
             <Avatar className="size-9 cursor-pointer">
               <AvatarImage src="/diverse-avatars.png" alt="User avatar" />
@@ -82,9 +121,9 @@ export const Navbar = ()=> {
             <DropdownMenuGroup>
               <DropdownMenuLabel>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-sm font-medium">Jane Doe</span>
+                  <span className="text-sm font-medium">{user.data.name || "name"}</span>
                   <span className="text-xs font-normal text-muted-foreground">
-                    jane@acme.com
+                    {user.data.email || "Email"}
                   </span>
                 </div>
               </DropdownMenuLabel>
@@ -104,13 +143,17 @@ export const Navbar = ()=> {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               variant="destructive"
-              onClick={() => console.log("[v0] logout")}
+              onClick={async() => await handleUserMenuAction("logOut")}
             >
               <LogOut data-icon="inline-start" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> : <Link 
+        href={'/login'}
+        className="rounded-md px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-accent-foreground"
+        >Login</Link>
+       }
       </div>
     </header>
   )

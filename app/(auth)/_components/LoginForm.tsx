@@ -8,27 +8,23 @@ import { loginAction } from "../_actions/authActions";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Spinner } from "@/components/ui/spinner";
 
 const LoginForm = () => {
-  const [state, action, pending] = useActionState(loginAction, false);
-  const router = useRouter();
+  const [loginState, action, isPending] = useActionState(loginAction, null);
+  // const router = useRouter();
 
   useEffect(() => {
-    if (!state) {
+    if (!loginState) {
       return;
     }
 
-    if (!state.success) {
-      toast.error(state.message || "Login Failed");
+    if (!loginState.success) {
+      toast.error(loginState.message || "Login Failed");
+      return;
     }
-
-    if (state.success) {
-      toast.success(state.message);
-      router.push('/dashboard');
-    }
-
-    
-  }, [state]);
+  }, [loginState]);
 
   return (
     <form action={action} className="space-y-4">
@@ -56,7 +52,25 @@ const LoginForm = () => {
           ></Input>
         </Field>
 
-        <Button type="submit">{pending ? "submiting..." : "Login"}</Button>
+        <Button type="submit">
+          {
+          isPending ? <span className="flex items-center gap-1">
+            <Spinner />
+            Loging In..
+          </span> : "Login"
+          }
+          </Button>
+        <div>
+          <p className="text-center text-sm text-muted-foreground">
+            Don't have an account?{" "}
+            <Link
+              href="/register"
+              className="font-medium text-primary hover:underline"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
       </Card>
     </form>
   );
