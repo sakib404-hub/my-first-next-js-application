@@ -8,6 +8,7 @@ import { loginAction } from "../_actions/authActions";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LoginForm = () => {
   const [loginState, action, isPending] = useActionState(loginAction, null);
@@ -51,6 +52,17 @@ const LoginForm = () => {
         </Field>
 
         <Button type="submit">{isPending ? "submiting..." : "Login"}</Button>
+        <div>
+          <p className="text-center text-sm text-muted-foreground">
+            Don't have an account?{" "}
+            <Link
+              href="/register"
+              className="font-medium text-primary hover:underline"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
       </Card>
     </form>
   );

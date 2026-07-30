@@ -3,10 +3,32 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { registerAction } from "../_actions/authActions";
+import Link from "next/link";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 const RegisterForm = () => {
+  const [registerState, action, isPending] = useActionState(registerAction, null);
+
+  useEffect(()=>{
+    if(!registerState){
+      return;
+    }
+    if(!registerState.success){
+      toast(registerState.message || "Registratation Failed!");
+      return;
+    }
+    toast.success(registerState.message || "Account Creation Successfull.");
+    redirect('/login');
+
+  }, [registerState])
+
   return (
-    <form className="space-y-4">
+    <form 
+    action={action}
+    className="space-y-4">
       <Card className="p-5 space-y-5">
         {/* Full Name */}
         <Field>
@@ -59,8 +81,21 @@ const RegisterForm = () => {
         </Field>
 
         <Button type="submit" className="w-full">
-          Create Account
+        {
+          isPending ? "Processing..." : "  Create Account"
+        }
         </Button>
+        <div>
+          <p className="text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-medium text-primary hover:underline"
+            >
+              Login
+            </Link>
+          </p>
+        </div>
       </Card>
     </form>
   );

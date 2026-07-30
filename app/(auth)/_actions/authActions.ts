@@ -13,6 +13,17 @@ interface LoginState {
     };
 }
 
+interface RegisterState {
+    success : boolean;
+    statusCode : number;
+    message : string;
+    data : {
+        name : string;
+        email : string;
+        password : string
+    }
+}
+
 export const loginAction = async(previousState : LoginState, formData : FormData) => {
 
     const email = formData.get("email");
@@ -52,7 +63,37 @@ export const loginAction = async(previousState : LoginState, formData : FormData
     return result;
 }
 
-export const registerAction = async()=>{
+export const registerAction = async(previousState : RegisterState ,formData : FormData)=>{
+    const payLoad = {
+        name : formData.get('name'),
+        email : formData.get('email'),
+        password : formData.get('password')
+    }
 
+    const confirmPassword = formData.get('confirmPassword');
+
+    if(payLoad.password !== confirmPassword){
+        return {
+            success : false,
+            message : "Passwords Do not match!"
+        }
+    }
+
+    const res = await fetch(`${process.env.BACKEND_API_URL}/api/user/register`,{
+        method : 'POST',
+        headers : {
+            "Content-Type" : "application/json"
+        },
+        body : JSON.stringify(payLoad)
+    })
+
+    const result = await res.json();
+
+
+    // if(result.success){
+    //     redirect('/login');
+    // }
+
+    return result;
 }
 
