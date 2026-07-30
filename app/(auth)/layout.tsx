@@ -5,7 +5,7 @@ import React from 'react'
 const Authlayout = async({children} : {children : React.ReactNode}) => {
 
   const user = await getMe();
-
+  
   return (
     <div className=''>
       <Navbar user={user}></Navbar>

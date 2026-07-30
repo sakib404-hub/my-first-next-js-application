@@ -73,7 +73,6 @@ interface NavbarProps {
 export const Navbar = ({user} : NavbarProps)=> {
   const router = useRouter()
 
-
   const handleUserMenuAction = async(action:string)=>{
     if(action === 'logOut'){
       await logOut();

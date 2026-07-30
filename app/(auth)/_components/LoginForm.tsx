@@ -9,6 +9,7 @@ import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Spinner } from "@/components/ui/spinner";
 
 const LoginForm = () => {
   const [loginState, action, isPending] = useActionState(loginAction, null);
@@ -51,7 +52,14 @@ const LoginForm = () => {
           ></Input>
         </Field>
 
-        <Button type="submit">{isPending ? "submiting..." : "Login"}</Button>
+        <Button type="submit">
+          {
+          isPending ? <span className="flex items-center gap-1">
+            <Spinner />
+            Loging In..
+          </span> : "Login"
+          }
+          </Button>
         <div>
           <p className="text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
