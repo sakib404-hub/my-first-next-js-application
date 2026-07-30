@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers"
 
-export const refreshToken = async()=>{
+export const getNewAccessToken = async()=>{
     const cookieStrore = await cookies();
 
    const refreshToken = cookieStrore.get("refreshToken")?.value;

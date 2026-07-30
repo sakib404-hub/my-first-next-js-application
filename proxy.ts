@@ -2,6 +2,7 @@ import  jwt, { JwtPayload }  from 'jsonwebtoken';
 import { NextRequest, NextResponse } from 'next/server'
 import jwtutils from './services/jwt';
 import { cookies } from 'next/headers';
+import { getNewAccessToken } from './services/refreshToken';
 
 const AUTH_ROUTE = [
     "/login",
@@ -25,20 +26,43 @@ export const proxy = async(request : NextRequest) => {
     // const accessToken = cookieStore.get("accessToken")?.value;
 
     //? another way of getting the access token
-    const accessToken = request.cookies.get("accessToken")?.value;
+    let accessToken = request.cookies.get("accessToken")?.value;
+    const refreshToken = request.cookies.get("refreshToken")?.value;
 
-    const decoded = accessToken ? jwtutils.verifyToken(accessToken, process.env.JWT_SECRET!)  : null;
+    let decodedAccessToken = accessToken ? jwtutils.verifyToken(accessToken, process.env.JWT_SECRET!)  : null;
+
+    const decodedRefreshToken = refreshToken ? jwtutils.verifyToken(refreshToken, process.env.JWT_REFRESH_SECRET!)  : null;
+
+    //? false or invalid accessToken
+    if(!decodedAccessToken?.success){
+        //? token has expired or it is invalid therefore remove it
+         cookieStore.delete("accessToken");
+    }
+
+    if(!decodedAccessToken?.success && decodedRefreshToken?.success){
+        //? if refresh Token is valid therefore creatng new access Token
+        const result = await getNewAccessToken();
+
+        if(result.success){
+            const newAccessToken = result.data.accessToken;
+
+            cookieStore.set("accessToken", newAccessToken, {
+                httpOnly : true,
+                sameSite : "lax",
+                maxAge : 60 * 60 * 24
+            });
+            accessToken = newAccessToken;
+            decodedAccessToken = accessToken ? jwtutils.verifyToken(accessToken, process.env.JWT_SECRET!)  : null;
+        }
+
+    //     cookieStore.delete("accessToken");
+    //    return NextResponse.redirect(new URL("/login", request.url));
+    }
 
     let userRole = null;
 
-    if(!decoded?.success){
-        //? token has expired or it is invalid therefore remove it
-        cookieStore.delete("accessToken");
-       return NextResponse.redirect(new URL("/login", request.url));
-    }
-
-    if(decoded?.success){
-        userRole = (decoded.data as JwtPayload).role;
+    if(decodedAccessToken?.success){
+        userRole = (decodedAccessToken.data as JwtPayload).role;
     }
 
     //? when the user is logged in and trying to get to the login or the register route we will redirect him to the home route or dashboard
