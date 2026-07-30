@@ -10,25 +10,19 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
-  const [state, action, pending] = useActionState(loginAction, false);
-  const router = useRouter();
+  const [loginState, action, isPending] = useActionState(loginAction, null);
+  // const router = useRouter();
 
   useEffect(() => {
-    if (!state) {
+    if (!loginState) {
       return;
     }
 
-    if (!state.success) {
-      toast.error(state.message || "Login Failed");
+    if (!loginState.success) {
+      toast.error(loginState.message || "Login Failed");
+      return;
     }
-
-    if (state.success) {
-      toast.success(state.message);
-      router.push('/dashboard');
-    }
-
-    
-  }, [state]);
+  }, [loginState]);
 
   return (
     <form action={action} className="space-y-4">
@@ -56,7 +50,7 @@ const LoginForm = () => {
           ></Input>
         </Field>
 
-        <Button type="submit">{pending ? "submiting..." : "Login"}</Button>
+        <Button type="submit">{isPending ? "submiting..." : "Login"}</Button>
       </Card>
     </form>
   );

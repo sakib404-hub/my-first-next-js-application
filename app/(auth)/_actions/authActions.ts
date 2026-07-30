@@ -3,7 +3,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-
 interface LoginState {
     success : boolean;
     statusCode : number;
@@ -47,7 +46,7 @@ export const loginAction = async(previousState : LoginState, formData : FormData
             maxAge : 60 * 60 * 24 * 7
         })
 
-        // redirect('/dashboard');
+        redirect('/dashboard');
     }
 
     return result;

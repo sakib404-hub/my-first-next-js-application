@@ -26,7 +26,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { logOut } from "@/services/logout"
-import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 const navLinks = [
