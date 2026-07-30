@@ -7,6 +7,13 @@ const AUTH_ROUTE = [
     "/register"
 ]
 
+const PUBLIC_ROUTES = [
+    '/',
+    '/news',
+    '/login',
+    '/register'
+]
+
 export const proxy = async(request : NextRequest) => {
     const pathname = request.nextUrl.pathname;
     // console.log(request.nextUrl.pathname);
@@ -38,6 +45,17 @@ export const proxy = async(request : NextRequest) => {
         }else {
              return NextResponse.redirect(new URL("/", request.url));
         }
+    }
+
+    //? checking the public routes
+    //? authenticated pages handling
+    const isPublic = PUBLIC_ROUTES.some((route)=>{
+        pathname === route || pathname.startsWith(route + "/") 
+    })
+
+    //? the user is wanting to access the protected route
+    if(!accessToken && !isPublic){
+        return NextResponse.redirect(new URL("/login", request.url));
     }
 
 
