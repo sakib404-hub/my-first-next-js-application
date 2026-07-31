@@ -25,12 +25,13 @@ export const proxy = async(request : NextRequest) => {
     const cookieStore = await cookies();
     // const accessToken = cookieStore.get("accessToken")?.value;
 
-    //? another way of getting the access token
+
+    //? access - token
     let accessToken = request.cookies.get("accessToken")?.value;
-    const refreshToken = request.cookies.get("refreshToken")?.value;
-
     let decodedAccessToken = accessToken ? jwtutils.verifyToken(accessToken, process.env.JWT_SECRET!)  : null;
-
+    
+    //?refresh - token
+    const refreshToken = request.cookies.get("refreshToken")?.value;
     const decodedRefreshToken = refreshToken ? jwtutils.verifyToken(refreshToken, process.env.JWT_REFRESH_SECRET!)  : null;
 
     //? false or invalid accessToken
@@ -44,7 +45,7 @@ export const proxy = async(request : NextRequest) => {
         const result = await getNewAccessToken();
 
         if(result.success){
-            const newAccessToken = result.data.accessToken;
+            const newAccessToken = result.data;
 
             cookieStore.set("accessToken", newAccessToken, {
                 httpOnly : true,
