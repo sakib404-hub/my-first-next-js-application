@@ -1,7 +1,8 @@
 import React, { Suspense } from "react";
-import { NewsList } from "../_components/news/NewsList";
 import { Spinner } from "@/components/ui/spinner";
 import { BookOpen } from "lucide-react";
+import { NewsList } from "./_components/NewsList";
+import { getAllNews } from "./_actions/getAllNews";
 
 const NewsPage = () => {
   return <div>
