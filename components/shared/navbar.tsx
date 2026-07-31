@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { logOut } from "@/services/logout"
 import { toast } from "sonner"
+import { NavbarProps } from "@/types/types"
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -37,39 +38,13 @@ const navLinks = [
   { label: "Contact", href: "/contact" },
 ]
 
-const userMenuItems = [
+  const userMenuItems = [
   { label: "Profile", href: "/profile", icon: User },
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Settings", href: "/settings", icon: Settings },
 ]
 
-interface IUser {
-  success : boolean;
-  statusCode : number;
-  message : string;
-  data : {
-    id : string;
-    name : string;
-    email : string; 
-    activeStatus : string;
-    role : string;
-    createdAt : string;
-    updatedAt : string;
-    isPremium : boolean;
-    profile : {
-      id : string;
-      profilePhoto : string;
-      bio : string | null;
-      userId : string;
-      createdAt : string;
-      updatedAt : string;
-    }
-  }
-}
 
-interface NavbarProps {
-  user : IUser
-}
 
 export const Navbar = ({user} : NavbarProps)=> {
   const router = useRouter()
